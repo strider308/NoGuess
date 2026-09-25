@@ -44,19 +44,70 @@ export interface RequestReceivedPayload {
   requestText: string;
 }
 
+// ---------------------------------------------------------------------------
+// M3 — Canonical epistemic state and authority class
+// (Defined here alongside payloads so they travel with events)
+// ---------------------------------------------------------------------------
+
+export type EpistemicState =
+  | "EXPLICIT"
+  | "REPO_DERIVED"
+  | "RUNTIME_OBSERVED"
+  | "HUMAN_RESOLVED"
+  | "INFERRED"
+  | "AMBIGUOUS"
+  | "CONFLICTING"
+  | "UNKNOWN"
+  | "EXTERNAL_DECISION";
+
+export type AuthorityClass =
+  | "HUMAN_RESOLVED"
+  | "EXECUTABLE_CONTRACT"
+  | "VERSIONED_POLICY"
+  | "RUNTIME_OBSERVED"
+  | "IMPLEMENTATION"
+  | "DOCUMENTATION"
+  | "MODEL_INFERENCE";
+
+// ---------------------------------------------------------------------------
+// M3 — canonical JSON-compatible value type
+// ---------------------------------------------------------------------------
+
+export type CanonicalValue =
+  | string
+  | number
+  | boolean
+  | null
+  | CanonicalValue[]
+  | { [key: string]: CanonicalValue };
+
+// ---------------------------------------------------------------------------
+// M3-extended evidence payloads
+// ---------------------------------------------------------------------------
+
 export interface EvidenceObservedPayload {
   evidenceId: string;
-  evidenceType: string;
-  content: string;
+  claimKey: string;
+  value: CanonicalValue;
+  epistemicState: EpistemicState;
+  authorityClass: AuthorityClass;
+  sourceRef: string;
+  /** Optional metadata. Must be finite 0..1 if present. NEVER affects authority. */
+  confidence?: number;
 }
 
 export interface EvidenceSupersededPayload {
+  /** The evidenceId being superseded (must reference an existing EvidenceObserved). */
   evidenceId: string;
+  /** The evidenceId of the evidence that supersedes it. */
   supersededBy: string;
 }
 
 export interface EvidenceConflictDetectedPayload {
+  /** The evidenceIds involved in the conflict. */
   evidenceIds: string[];
+  /** The claimKey the conflict is about. */
+  claimKey: string;
   description: string;
 }
 
@@ -83,6 +134,10 @@ export interface ClarificationRequestedPayload {
 export interface HumanDecisionRecordedPayload {
   decisionId: string;
   choice: string;
+  /** M3 — optional claim projection fields. When present, the decision projects
+   *  as HUMAN_RESOLVED evidence for the given claimKey/value. */
+  claimKey?: string;
+  value?: CanonicalValue;
 }
 
 export interface DecisionSupersededPayload {

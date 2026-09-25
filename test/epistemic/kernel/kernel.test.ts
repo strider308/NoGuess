@@ -90,7 +90,7 @@ describe("M2 test 2: non-RequestReceived first event is denied", () => {
         runId: "run-1",
         type: "EvidenceObserved",
         emitter: "BOB",
-        payload: { evidenceId: "e1", evidenceType: "text", content: "c" },
+        payload: { evidenceId: "e1", claimKey: "k", value: "v", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
       },
       "FIRST_EVENT_MUST_BE_REQUEST_RECEIVED"
     );
@@ -121,7 +121,7 @@ describe("M2 test 4: normal event after RequestReceived can be admitted", () => 
       runId: "run-1",
       type: "EvidenceObserved",
       emitter: "BOB",
-      payload: { evidenceId: "e1", evidenceType: "text", content: "hello" },
+      payload: { evidenceId: "e1", claimKey: "k", value: "hello", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
     });
     assert.equal(evt.type, "EvidenceObserved");
     gl.close();
@@ -510,7 +510,7 @@ describe("M2 test 21: any event after RunClosed is denied", () => {
         runId: "run-1",
         type: "EvidenceObserved",
         emitter: "BOB",
-        payload: { evidenceId: "e1", evidenceType: "text", content: "late" },
+        payload: { evidenceId: "e1", claimKey: "k", value: "late", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
       },
       "RUN_CLOSED"
     );
@@ -695,7 +695,7 @@ describe("M2 test 28: unknown causationEventId is denied", () => {
         type: "EvidenceObserved",
         emitter: "BOB",
         causationEventId: "evt-0000099999",
-        payload: { evidenceId: "e1", evidenceType: "text", content: "c" },
+        payload: { evidenceId: "e1", claimKey: "k", value: "v", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
       },
       "UNKNOWN_CAUSATION_EVENT"
     );
@@ -723,7 +723,7 @@ describe("M2 test 29: cross-run causationEventId is denied", () => {
         type: "EvidenceObserved",
         emitter: "BOB",
         causationEventId: evtA.eventId,
-        payload: { evidenceId: "e1", evidenceType: "text", content: "c" },
+        payload: { evidenceId: "e1", claimKey: "k", value: "v", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
       },
       "CROSS_RUN_CAUSATION"
     );
@@ -743,7 +743,7 @@ describe("M2 test 30: valid same-run causationEventId is allowed", () => {
       type: "EvidenceObserved",
       emitter: "BOB",
       causationEventId: reqEvt.eventId,
-      payload: { evidenceId: "e1", evidenceType: "text", content: "c" },
+      payload: { evidenceId: "e1", claimKey: "k", value: "v", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
     });
     assert.equal(result.causationEventId, reqEvt.eventId);
     gl.close();
@@ -798,7 +798,7 @@ describe("M2 test 32: denied events do not appear in the underlying ledger", () 
         runId: "run-1",
         type: "EvidenceObserved",
         emitter: "BOB",
-        payload: { evidenceId: "e1", evidenceType: "text", content: "c" },
+        payload: { evidenceId: "e1", claimKey: "k", value: "v", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
       });
     } catch {
       // expected
@@ -820,7 +820,7 @@ describe("M2 test 33: allowed events are appended exactly once", () => {
       runId: "run-1",
       type: "EvidenceObserved",
       emitter: "BOB",
-      payload: { evidenceId: "e1", evidenceType: "text", content: "c" },
+      payload: { evidenceId: "e1", claimKey: "k", value: "v", epistemicState: "INFERRED", authorityClass: "MODEL_INFERENCE", sourceRef: "s" },
     });
     const run = gl.listRun("run-1");
     assert.equal(run.length, 2); // RequestReceived + EvidenceObserved

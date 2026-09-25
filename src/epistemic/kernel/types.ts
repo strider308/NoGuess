@@ -37,7 +37,9 @@ export type KernelDenialCode =
   /** causationEventId is supplied but does not exist in the ledger at all. */
   | "UNKNOWN_CAUSATION_EVENT"
   /** causationEventId exists but belongs to a different run. */
-  | "CROSS_RUN_CAUSATION";
+  | "CROSS_RUN_CAUSATION"
+  /** M3 — EvidenceObserved payload is missing required fields or has invalid values. */
+  | "MALFORMED_EVIDENCE";
 
 // ---------------------------------------------------------------------------
 // KernelDecision

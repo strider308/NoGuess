@@ -21,6 +21,13 @@
       "file": "bob_sessions/task03_m2_epistemic_kernel_summary.png",
       "sha256": "7ed6440b62a495cb0fe83907634eda94685cd73ab610b562388746a00c7e6a98",
       "captured_at": "2026-09-25T22:12:52.2608263+05:30"
+    },
+    {
+      "task": "M3 evidence and authority reasoning with trust-boundary hardening",
+      "milestone": "M3",
+      "file": "bob_sessions/task04_m3_evidence_authority_summary.png",
+      "sha256": "02af321edc454bdf7c064668b6c4324787e38760d54452460062524de8495bd6",
+      "captured_at": "2026-09-25T22:45:37.2744243+05:30"
     }
   ]
 }

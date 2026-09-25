@@ -1,16 +1,25 @@
 /**
- * M2 — Admission rules and emitter authority table.
+ * M2/M3 — Admission rules and emitter authority table.
  *
- * This module is the single auditable location for all M2 invariants.
+ * This module is the single auditable location for all M2/M3 invariants.
  * Rules are evaluated deterministically against replay-derived state.
  * No mutable side effects; no network; no randomness.
  */
 
-import type { EventType } from "../events.js";
-import type { AppendInput, Emitter, EventEnvelope } from "../event-envelope.js";
+import type {
+  EventType,
+  AuthorityClass,
+  EpistemicState,
+} from "../events.js";
+import type {
+  AppendInput,
+  Emitter,
+  EventEnvelope,
+} from "../event-envelope.js";
+import type { EvidenceObservedPayload } from "../events.js";
 import type { KernelRunState } from "./state.js";
 import { allow, deny } from "./types.js";
-import type { KernelDecision } from "./types.js";
+import type { KernelDecision, KernelDenialCode } from "./types.js";
 
 // ---------------------------------------------------------------------------
 // Emitter authority table
@@ -38,7 +47,186 @@ const EMITTER_AUTHORITY: Partial<Record<EventType, ReadonlySet<Emitter>>> = {
 
   // Hidden evaluator — EVALUATOR only
   HiddenIntentCheckObserved: new Set<Emitter>(["EVALUATOR"]),
+
+  // M3 — EvidenceConflictDetected: KERNEL only
+  EvidenceConflictDetected: new Set<Emitter>(["KERNEL"]),
+
+  // M3 — EvidenceObserved: only BOB and SYSTEM may attest evidence directly.
+  //      HUMAN uses HumanDecisionRecorded.
+  //      KERNEL uses EvidenceConflictDetected or other kernel events.
+  //      EVALUATOR uses HiddenIntentCheckObserved.
+  EvidenceObserved: new Set<Emitter>(["BOB", "SYSTEM"]),
 };
+
+// ---------------------------------------------------------------------------
+// M3 — Valid canonical sets for runtime validation
+// ---------------------------------------------------------------------------
+
+const VALID_AUTHORITY_CLASSES: ReadonlySet<AuthorityClass> = new Set<AuthorityClass>([
+  "HUMAN_RESOLVED",
+  "EXECUTABLE_CONTRACT",
+  "VERSIONED_POLICY",
+  "RUNTIME_OBSERVED",
+  "IMPLEMENTATION",
+  "DOCUMENTATION",
+  "MODEL_INFERENCE",
+]);
+
+const VALID_EPISTEMIC_STATES: ReadonlySet<EpistemicState> = new Set<EpistemicState>([
+  "EXPLICIT",
+  "REPO_DERIVED",
+  "RUNTIME_OBSERVED",
+  "HUMAN_RESOLVED",
+  "INFERRED",
+  "AMBIGUOUS",
+  "CONFLICTING",
+  "UNKNOWN",
+  "EXTERNAL_DECISION",
+]);
+
+// ---------------------------------------------------------------------------
+// M3 — Attestation constraints per emitter
+//
+// BOB:    MODEL_INFERENCE / INFERRED only.
+// SYSTEM: grounded authority classes only; restricted epistemic states.
+//         Must NOT attest derived states (AMBIGUOUS, CONFLICTING, UNKNOWN,
+//         EXTERNAL_DECISION, HUMAN_RESOLVED, INFERRED).
+// ---------------------------------------------------------------------------
+
+const SYSTEM_ALLOWED_AUTHORITY: ReadonlySet<AuthorityClass> = new Set<AuthorityClass>([
+  "EXECUTABLE_CONTRACT",
+  "VERSIONED_POLICY",
+  "RUNTIME_OBSERVED",
+  "IMPLEMENTATION",
+  "DOCUMENTATION",
+]);
+
+const SYSTEM_ALLOWED_EPISTEMIC: ReadonlySet<EpistemicState> = new Set<EpistemicState>([
+  "EXPLICIT",
+  "REPO_DERIVED",
+  "RUNTIME_OBSERVED",
+]);
+
+// ---------------------------------------------------------------------------
+// M3 — Runtime field validation (fail-closed: rejects unknown/absent fields)
+// ---------------------------------------------------------------------------
+
+function validateEvidenceObservedFields(
+  payload: EvidenceObservedPayload
+): KernelDecision {
+  // evidenceId: non-empty string
+  if (typeof payload.evidenceId !== "string" || payload.evidenceId.trim() === "") {
+    return deny(
+      "MALFORMED_EVIDENCE",
+      `EvidenceObserved.evidenceId must be a non-empty string.`
+    );
+  }
+  // claimKey: non-empty string
+  if (typeof payload.claimKey !== "string" || payload.claimKey.trim() === "") {
+    return deny(
+      "MALFORMED_EVIDENCE",
+      `EvidenceObserved.claimKey must be a non-empty string.`
+    );
+  }
+  // sourceRef: non-empty string
+  if (typeof payload.sourceRef !== "string" || payload.sourceRef.trim() === "") {
+    return deny(
+      "MALFORMED_EVIDENCE",
+      `EvidenceObserved.sourceRef must be a non-empty string.`
+    );
+  }
+  // authorityClass: must be a valid AuthorityClass
+  if (!VALID_AUTHORITY_CLASSES.has(payload.authorityClass as AuthorityClass)) {
+    return deny(
+      "MALFORMED_EVIDENCE",
+      `EvidenceObserved.authorityClass "${payload.authorityClass}" is not a valid AuthorityClass.`
+    );
+  }
+  // epistemicState: must be a valid EpistemicState
+  if (!VALID_EPISTEMIC_STATES.has(payload.epistemicState as EpistemicState)) {
+    return deny(
+      "MALFORMED_EVIDENCE",
+      `EvidenceObserved.epistemicState "${payload.epistemicState}" is not a valid EpistemicState.`
+    );
+  }
+  // value: must not be undefined (null, string, number, boolean, array, object are all valid)
+  if (payload.value === undefined) {
+    return deny(
+      "MALFORMED_EVIDENCE",
+      `EvidenceObserved.value must be present (null, string, number, boolean, array, or object).`
+    );
+  }
+  // confidence: if supplied, must be a finite number in [0,1]
+  if (payload.confidence !== undefined) {
+    if (
+      typeof payload.confidence !== "number" ||
+      !Number.isFinite(payload.confidence) ||
+      payload.confidence < 0 ||
+      payload.confidence > 1
+    ) {
+      return deny(
+        "MALFORMED_EVIDENCE",
+        `EvidenceObserved.confidence must be a finite number in [0,1], got ${payload.confidence}.`
+      );
+    }
+  }
+  return allow();
+}
+
+// ---------------------------------------------------------------------------
+// M3 — Attestation boundary check per emitter
+// ---------------------------------------------------------------------------
+
+function checkEvidenceObservedAttestation(
+  emitter: Emitter,
+  payload: EvidenceObservedPayload
+): KernelDecision {
+  if (emitter === "BOB") {
+    // BOB: only MODEL_INFERENCE / INFERRED
+    if (payload.authorityClass !== "MODEL_INFERENCE") {
+      return deny(
+        "EMITTER_NOT_AUTHORISED" as KernelDenialCode,
+        `BOB may not directly attest authorityClass "${payload.authorityClass}". ` +
+          `BOB-emitted EvidenceObserved must use authorityClass "MODEL_INFERENCE".`
+      );
+    }
+    if (payload.epistemicState !== "INFERRED") {
+      return deny(
+        "EMITTER_NOT_AUTHORISED" as KernelDenialCode,
+        `BOB may not claim epistemicState "${payload.epistemicState}" in EvidenceObserved. ` +
+          `BOB-emitted evidence must use epistemicState "INFERRED".`
+      );
+    }
+    return allow();
+  }
+
+  if (emitter === "SYSTEM") {
+    // SYSTEM: only grounded authority classes
+    if (!SYSTEM_ALLOWED_AUTHORITY.has(payload.authorityClass)) {
+      return deny(
+        "EMITTER_NOT_AUTHORISED" as KernelDenialCode,
+        `SYSTEM may not attest authorityClass "${payload.authorityClass}" in EvidenceObserved. ` +
+          `SYSTEM may only use: ${[...SYSTEM_ALLOWED_AUTHORITY].join(", ")}.`
+      );
+    }
+    // SYSTEM: only grounded epistemic states
+    if (!SYSTEM_ALLOWED_EPISTEMIC.has(payload.epistemicState)) {
+      return deny(
+        "EMITTER_NOT_AUTHORISED" as KernelDenialCode,
+        `SYSTEM may not claim epistemicState "${payload.epistemicState}" in EvidenceObserved. ` +
+          `SYSTEM may only use: ${[...SYSTEM_ALLOWED_EPISTEMIC].join(", ")}.`
+      );
+    }
+    return allow();
+  }
+
+  // All other emitters (HUMAN, KERNEL, EVALUATOR) are already blocked by
+  // the EMITTER_AUTHORITY table above. This is a defence-in-depth fallback.
+  return deny(
+    "EMITTER_NOT_AUTHORISED" as KernelDenialCode,
+    `Emitter "${emitter}" is not authorised to emit EvidenceObserved.`
+  );
+}
 
 // ---------------------------------------------------------------------------
 // admitEvent — the single entry point for all admission checks
@@ -96,6 +284,17 @@ export function admitEvent(
       `Emitter ${input.emitter} is not authorised to emit ${input.type}. ` +
         `Authorised emitters: ${[...authorised].join(", ")}.`
     );
+  }
+
+  // -------------------------------------------------------------------------
+  // M3 — EvidenceObserved: structural validation then attestation boundary
+  // -------------------------------------------------------------------------
+  if (input.type === "EvidenceObserved") {
+    const p = input.payload as EvidenceObservedPayload;
+    const fieldCheck = validateEvidenceObservedFields(p);
+    if (!fieldCheck.allowed) return fieldCheck;
+    const attestationCheck = checkEvidenceObservedAttestation(input.emitter, p);
+    if (!attestationCheck.allowed) return attestationCheck;
   }
 
   // -------------------------------------------------------------------------

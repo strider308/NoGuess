@@ -67,3 +67,24 @@ Authoritative Bob IDE totals:
 
 The task-specific balance reflects the 2.61 Bobcoins attributed to M2.
 The Bob IDE-wide counter remains authoritative for total remaining allocation.
+| 2026-09-25T22:45:37.2946556+05:30 | M3 | M3 evidence and authority reasoning with trust-boundary hardening | 18.75 | 5.74 | 13.01 | PASS |
+
+## M3 IDE-wide reconciliation
+
+M3 Bob task:
+- Task ID: 77b43a15c957c1e14ecc3985065142c0
+- Final task Bobcoins consumed: 13.01
+- Task balance basis: 18.75 -> 5.74
+
+Authoritative Bob IDE totals:
+- Before M3: 31.25 / 50 used
+- After M3: 44.34 / 50 used
+- Total IDE-wide consumption during interval: 13.09
+- Usage outside the M3 task during interval: 0.08
+- Remaining authoritative allocation: 5.66 / 50
+
+M3 includes the final trust-boundary corrective pass.
+
+The task-specific balance records the 13.01 Bobcoins attributed to the
+M3 task. The Bob IDE-wide counter is authoritative for total remaining
+hackathon allocation.
