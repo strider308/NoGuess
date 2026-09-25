@@ -510,6 +510,18 @@ Other / none
 
 ---
 
+## Evaluation status
+
+Public validation currently includes:
+
+- **364 / 364 tests passing**
+- three reproducible flagship authority outcomes in `docs/DEMO_EVIDENCE.md`
+- the public, non-secret **GuessBench-Bob v0.3 evaluation protocol** in `docs/BENCHMARK_PROTOCOL.md`
+
+The benchmark protocol defines a 32-case design across Core, RealWorld, and Adversarial groups, but this repository does **not** claim a public aggregate hidden-benchmark score yet. Development-visible tests, behavioural demo evidence, and private evaluator results are kept separate.
+
+---
+
 ## Current hackathon scope
 
 The public hackathon slice implements:
