@@ -49,3 +49,21 @@ The task-specific balance records only the 2.78 Bobcoins attributed to
 the M1 task. The IDE-wide counter is authoritative for total remaining
 hackathon allocation.
 | 2026-09-25T21:58:42.2878982+05:30 | M1 | M1 immutable epistemic event ledger | 24.55 | 21.77 | 2.78 | PASS |
+| 2026-09-25T22:12:52.2801411+05:30 | M2 | M2 deterministic epistemic kernel | 21.39 | 18.78 | 2.61 | PASS |
+
+## M2 IDE-wide reconciliation
+
+M2 Bob task:
+- Task ID: 893ece7c77bd6bebe97ab6fbefed631d
+- Task Bobcoins consumed: 2.61
+- Task balance basis: 21.39 -> 18.78
+
+Authoritative Bob IDE totals:
+- Before M2: 28.61 / 50 used
+- After M2: 31.25 / 50 used
+- Total IDE-wide consumption during interval: 2.64
+- Usage outside the M2 task during interval: 0.03
+- Remaining authoritative allocation: 18.75 / 50
+
+The task-specific balance reflects the 2.61 Bobcoins attributed to M2.
+The Bob IDE-wide counter remains authoritative for total remaining allocation.
