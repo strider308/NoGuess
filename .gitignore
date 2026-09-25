@@ -1,0 +1,17 @@
+node_modules/
+dist/
+coverage/
+
+.env
+.env.*
+*.pem
+*.key
+
+credentials/
+secrets/
+
+# NEVER put private evaluator/oracle material in the public repo
+evaluator-private/
+PRIVATE_EVALUATOR_ONLY/
+hidden/
+oracle/
