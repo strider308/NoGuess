@@ -1,18 +1,18 @@
 {
-  "name": "noguess",
-  "version": "0.1.0",
-  "description": "NoGuess M0 — deterministic synthetic fixture runtime",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "tsc --noEmit",
-    "typecheck": "tsc --noEmit",
-    "test": "node scripts/run-tests.mjs",
-    "demo:vip-refund": "node --import tsx scripts/demo-vip-refund.ts"
-  },
-  "devDependencies": {
-    "@types/node": "^22.0.0",
-    "tsx": "^4.19.0",
-    "typescript": "^5.5.0"
-  }
+    "name":  "noguess",
+    "version":  "0.1.0",
+    "description":  "NoGuess - epistemic control plane for AI coding agents",
+    "private":  true,
+    "type":  "module",
+    "scripts":  {
+                    "build":  "tsc --noEmit",
+                    "typecheck":  "tsc --noEmit",
+                    "test":  "node scripts/run-tests.mjs",
+                    "demo:vip-refund":  "node --import tsx scripts/demo-vip-refund.ts"
+                },
+    "devDependencies":  {
+                            "@types/node":  "^22.0.0",
+                            "tsx":  "^4.19.0",
+                            "typescript":  "^5.5.0"
+                        }
 }
