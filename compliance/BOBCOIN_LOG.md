@@ -48,3 +48,4 @@ Authoritative Bob IDE totals:
 The task-specific balance records only the 2.78 Bobcoins attributed to
 the M1 task. The IDE-wide counter is authoritative for total remaining
 hackathon allocation.
+| 2026-09-25T21:58:42.2878982+05:30 | M1 | M1 immutable epistemic event ledger | 24.55 | 21.77 | 2.78 | PASS |

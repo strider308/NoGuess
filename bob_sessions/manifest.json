@@ -7,6 +7,13 @@
       "file": "bob_sessions/task01_m0_fixture_runtime_summary.png",
       "sha256": "39f5d8018dea8ef83bb52bac2bcd1e2244a2affd833a6221d4ac1d3a6102c0f5",
       "captured_at": "2026-09-25T21:30:23.0857604+05:30"
+    },
+    {
+      "task": "M1 immutable epistemic event ledger",
+      "milestone": "M1",
+      "file": "bob_sessions/task02_m1_event_ledger_summary.png",
+      "sha256": "f0b285fe1c9063b0440e980a669c8b5a834e4f49e4f3abbe3f73a71a67be6773",
+      "captured_at": "2026-09-25T21:58:42.2714642+05:30"
     }
   ]
 }
