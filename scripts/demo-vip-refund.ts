@@ -442,4 +442,3 @@ bullet("Ledger events", String(rawLedger.listRun(RUN_ID).length));
 bullet("Integrity", receiptAfter.ledgerIntegrity.ok ? "PASS" : "FAIL");
 
 rawLedger.close();
-
