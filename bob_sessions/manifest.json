@@ -1,4 +1,12 @@
 {
   "schema_version": "1.0",
-  "sessions": []
+  "sessions": [
+    {
+      "task": "M0 deterministic fixture runtime and canonicalization",
+      "milestone": "M0",
+      "file": "bob_sessions/task01_m0_fixture_runtime_summary.png",
+      "sha256": "39f5d8018dea8ef83bb52bac2bcd1e2244a2affd833a6221d4ac1d3a6102c0f5",
+      "captured_at": "2026-09-25T21:30:23.0857604+05:30"
+    }
+  ]
 }
