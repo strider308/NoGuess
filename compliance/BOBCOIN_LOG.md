@@ -1,10 +1,10 @@
 # Bobcoin Log
 
-Starting allocation recorded: 
+Starting allocation recorded: 40
 
 | Timestamp | Milestone | Task | Before | After | Delta | Result |
 |---|---|---|---:|---:|---:|---|
-| 2026-09-25T20:41:48.6010108+05:30 | Kickoff | Hackathon account verification |  |  | 0 | PASS |
+| 2026-09-25T20:43:15.7459179+05:30 | Kickoff | Hackathon account verification | 40 | 40 | 0 | PASS |
 
 ## Usage policy
 
