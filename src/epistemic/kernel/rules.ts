@@ -56,6 +56,12 @@ const EMITTER_AUTHORITY: Partial<Record<EventType, ReadonlySet<Emitter>>> = {
   //      KERNEL uses EvidenceConflictDetected or other kernel events.
   //      EVALUATOR uses HiddenIntentCheckObserved.
   EvidenceObserved: new Set<Emitter>(["BOB", "SYSTEM"]),
+
+  // M4-M6 — Intent control-plane events — KERNEL only
+  // BOB proposes interpretations; KERNEL records forks, classifications, clarifications.
+  SemanticForkDetected: new Set<Emitter>(["KERNEL"]),
+  AmbiguityClassified: new Set<Emitter>(["KERNEL"]),
+  ClarificationRequested: new Set<Emitter>(["KERNEL"]),
 };
 
 // ---------------------------------------------------------------------------

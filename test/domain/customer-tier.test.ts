@@ -7,7 +7,7 @@
  * 3. VIP status does NOT bypass the configured refund approval threshold.
  *    The threshold rule is solely policy-based (PolicyConfig), regardless of tier.
  *
- * No GuessBench case IDs or hidden expected answers appear in this file.
+ * This test contains no benchmark-specific behavior.
  */
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";

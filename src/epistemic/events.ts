@@ -111,29 +111,79 @@ export interface EvidenceConflictDetectedPayload {
   description: string;
 }
 
+// ---------------------------------------------------------------------------
+// M4-M6 — Protected observable effect keys
+// ---------------------------------------------------------------------------
+
+export type ProtectedEffect =
+  | "execution"
+  | "authorization"
+  | "dataScope"
+  | "persistence"
+  | "externalSideEffect";
+
+export interface ProbeOutcome {
+  probeId: string;
+  outcomeKey: string;
+  description: string;
+  effects: Partial<Record<ProtectedEffect, string>>;
+}
+
 export interface InterpretationProposedPayload {
   interpretationId: string;
-  description: string;
+  claimKey: string;
+  summary: string;
+  /** @deprecated use summary — kept for backwards compat */
+  description?: string;
+  probeOutcomes: ProbeOutcome[];
 }
 
 export interface SemanticForkDetectedPayload {
+  claimKey: string;
   interpretationIds: string[];
-  description: string;
+  /** probeIds where effect signatures diverge */
+  divergingProbeIds: string[];
+  /** Map: probeId -> interpretationId -> canonical effect signature JSON */
+  effectSignatures: Record<string, Record<string, string>>;
+  /** @deprecated */
+  description?: string;
 }
+
+export type MaterialityClassification = "MATERIAL" | "NON_MATERIAL";
 
 export interface AmbiguityClassifiedPayload {
   ambiguityId: string;
-  classification: string;
+  forkEventId: string;
+  claimKey: string;
+  classification: MaterialityClassification;
+}
+
+export interface ClarificationOption {
+  optionId: string;
+  outcomeDescription: string;
+  /** interpretation IDs consistent with this outcome (empty for Other) */
+  interpretationIds: string[];
 }
 
 export interface ClarificationRequestedPayload {
-  clarificationId: string;
-  question: string;
+  questionId: string;
+  claimKey: string;
+  probeId: string;
+  prompt: string;
+  options: ClarificationOption[];
+  /** @deprecated use questionId */
+  clarificationId?: string;
+  /** @deprecated use prompt */
+  question?: string;
 }
 
 export interface HumanDecisionRecordedPayload {
   decisionId: string;
   choice: string;
+  /** optionId from the clarification that was answered */
+  selectedOptionId?: string;
+  /** causationEventId of the ClarificationRequested */
+  causationEventId?: string;
   /** M3 — optional claim projection fields. When present, the decision projects
    *  as HUMAN_RESOLVED evidence for the given claimKey/value. */
   claimKey?: string;
@@ -145,18 +195,40 @@ export interface DecisionSupersededPayload {
   supersededBy: string;
 }
 
+export interface CapabilityEnvelope {
+  capabilityId: string;
+  runId: string;
+  readPaths: string[];
+  writePaths: string[];
+  commands: string[];
+  network: boolean;
+  mcpTools: string[];
+  /** event IDs that justify the grant */
+  basisEventIds: string[];
+}
+
 export interface CapabilityRequestedPayload {
   capabilityId: string;
   capabilityType: string;
+  runId: string;
+  readPaths?: string[];
+  writePaths?: string[];
+  commands?: string[];
+  network?: boolean;
+  mcpTools?: string[];
 }
 
 export interface CapabilityGrantedPayload {
   capabilityId: string;
+  envelope: CapabilityEnvelope;
+  basisEventIds: string[];
 }
 
 export interface CapabilityDeniedPayload {
   capabilityId: string;
   reason: string;
+  /** UNRESOLVED_MATERIAL_GUESS_DEBT when blocked due to guess debt */
+  denialCode?: string;
 }
 
 export interface CapabilityExpiredPayload {

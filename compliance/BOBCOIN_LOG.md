@@ -88,3 +88,28 @@ M3 includes the final trust-boundary corrective pass.
 The task-specific balance records the 13.01 Bobcoins attributed to the
 M3 task. The Bob IDE-wide counter is authoritative for total remaining
 hackathon allocation.
+
+| 2026-09-25T23:11:32.4100743+05:30 | FINAL_CORE | Final core vertical slice | 5.66 | -0.14 | 5.80 | BOB_LIMIT_REACHED |
+
+## Final Core IDE-wide reconciliation
+
+Final Bob task:
+- Task ID: 2b7f2413ea8026927d46b70d3244efef
+- Workspace: NoGuess
+- Task Bobcoins consumed: 5.80
+- Task-specific theoretical balance: 5.66 -> -0.14
+- Bob stopped because the available trial/allocation was exhausted.
+
+Authoritative Bob IDE totals:
+- Before final task: 44.34 / 50 used
+- After final task: 50.16 / 50 used
+- IDE-wide consumption during interval: 5.82
+- Usage outside the final task during interval: 0.02
+- Nominal allocation exceeded by: 0.16
+- Remaining usable Bobcoin allocation: 0
+
+Important status distinction:
+- The Bob task itself is recorded as BOB_LIMIT_REACHED, not PASS.
+- Bob had implemented the final vertical slice and reached 364 passing tests
+  before exhausting the allocation during demo validation.
+- Final validation and small demo hardening were completed locally afterward.

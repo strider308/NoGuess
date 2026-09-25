@@ -28,6 +28,13 @@
       "file": "bob_sessions/task04_m3_evidence_authority_summary.png",
       "sha256": "02af321edc454bdf7c064668b6c4324787e38760d54452460062524de8495bd6",
       "captured_at": "2026-09-25T22:45:37.2744243+05:30"
+    },
+    {
+      "task": "Final core NoGuess vertical slice: semantic fork, clarification, capability gate, receipt, VIP refund demo",
+      "milestone": "FINAL_CORE",
+      "file": "bob_sessions/task05_final_core_vertical_slice_summary.png",
+      "sha256": "460c60ccc429294b934b0c9f820ead927dc95b378a66b08f70c61a15ff27925a",
+      "captured_at": "2026-09-25T23:11:32.2735689+05:30"
     }
   ]
 }
