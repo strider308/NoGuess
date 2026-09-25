@@ -17,7 +17,7 @@ New-Item -ItemType Directory -Force -Path $EvidenceDir | Out-Null
 function Write-Utf8NoBom {
     param(
         [Parameter(Mandatory=$true)][string]$Path,
-        [Parameter(Mandatory=$true)][string[]]$Lines
+        [Parameter(Mandatory=$true)][AllowEmptyCollection()][AllowEmptyString()][string[]]$Lines
     )
     $Text = ($Lines -join [Environment]::NewLine) + [Environment]::NewLine
     [System.IO.File]::WriteAllText(
