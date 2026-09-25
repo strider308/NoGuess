@@ -538,7 +538,7 @@ The public hackathon slice implements:
 - capability gating;
 - capability invalidation after decision supersession;
 - Epistemic Receipt;
-- deterministic VIP-refund demonstration.
+- reproducible VIP-refund demonstration.
 
 The broader architecture also defines a physically separate evaluator and GuessBench benchmark environment.
 
