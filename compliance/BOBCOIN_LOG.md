@@ -30,3 +30,21 @@ Difference outside the M0 task:
 Remaining IDE-wide allocation:
 24.55 Bobcoins.
 | 2026-09-25T21:30:23.1185325+05:30 | M0 | M0 deterministic fixture runtime and canonicalization | 50 | 24.76 | 25.24 | PASS |
+
+## M1 IDE-wide reconciliation
+
+M1 Bob task:
+- Task ID: f3a4d1af00a9279c2c5940202857a29d
+- Task Bobcoins consumed: 2.78
+- Task balance basis: 24.55 -> 21.77
+
+Authoritative Bob IDE totals:
+- Before M1: 25.45 / 50 used
+- After M1: 28.61 / 50 used
+- Total IDE-wide consumption during interval: 3.16
+- Usage outside the M1 task during interval: 0.38
+- Remaining authoritative allocation: 21.39 / 50
+
+The task-specific balance records only the 2.78 Bobcoins attributed to
+the M1 task. The IDE-wide counter is authoritative for total remaining
+hackathon allocation.
