@@ -4,6 +4,8 @@
 
 **NoGuess is an epistemic control plane for AI coding agents.**
 
+![NoGuess architecture and flagship demo](docs/assets/noguess-architecture-demo.svg)
+
 AI coding agents are increasingly good at producing code that compiles, passes tests, and looks reasonable. But when a request is underspecified, an agent can silently convert a plausible assumption into an implementation requirement.
 
 That creates a dangerous failure mode:
