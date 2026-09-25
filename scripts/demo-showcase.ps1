@@ -5,6 +5,31 @@ Set-Location "C:\dev\IBM-BOB-2\hackathon\NoGuess"
 $PreviousNodeNoWarnings = $env:NODE_NO_WARNINGS
 $env:NODE_NO_WARNINGS = "1"
 
+# Recording-safe console output. Windows PowerShell 5.1 may decode Node's UTF-8
+# output through the legacy console code page; force UTF-8 and normalize the
+# few demo glyphs we care about to plain ASCII for a clean screen recording.
+try { chcp 65001 > $null } catch {}
+$Utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+[Console]::InputEncoding = $Utf8NoBom
+[Console]::OutputEncoding = $Utf8NoBom
+$OutputEncoding = $Utf8NoBom
+
+function Normalize-DisplayLine {
+    param([string]$Line)
+
+    if ($null -eq $Line) { return "" }
+
+    return $Line.
+        Replace("—", "-").
+        Replace("✓", "PASS").
+        Replace("₹", "INR ").
+        Replace("│", "|").
+        Replace("ΓÇö", "-").
+        Replace("Γ£ô", "PASS").
+        Replace("Γé╣", "INR ").
+        Replace("Γöé", "|")
+}
+
 function Show-Section {
     param([string]$Title)
     Write-Host ""
@@ -34,7 +59,7 @@ function Run-And-Show {
 
     $Output |
         Select-String -Pattern $Patterns |
-        ForEach-Object { $_.Line }
+        ForEach-Object { Normalize-DisplayLine $_.Line }
 
     Write-Host ""
 }
