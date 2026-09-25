@@ -2,6 +2,13 @@ $ErrorActionPreference = "Stop"
 
 Set-Location "C:\dev\IBM-BOB-2\hackathon\NoGuess"
 
+# Node 22 emits an ExperimentalWarning for node:sqlite on stderr.
+# Suppress runtime warnings during evidence capture so Windows PowerShell 5.1
+# does not promote a successful Node process into NativeCommandError when
+# $ErrorActionPreference is Stop. This changes presentation only, not behavior.
+$PreviousNodeNoWarnings = $env:NODE_NO_WARNINGS
+$env:NODE_NO_WARNINGS = "1"
+
 $ExpectedBranch = "submission/final-packaging-20260925"
 if ((git branch --show-current) -ne $ExpectedBranch) {
     throw "Wrong branch. Expected $ExpectedBranch."
@@ -229,5 +236,11 @@ if ($LASTEXITCODE -ne 0) { throw "Evidence push failed." }
 Write-Host "`n=== FINAL STATE ===" -ForegroundColor Cyan
 git status
 git log --oneline -5
+
+if ($null -eq $PreviousNodeNoWarnings) {
+    Remove-Item Env:NODE_NO_WARNINGS -ErrorAction SilentlyContinue
+} else {
+    $env:NODE_NO_WARNINGS = $PreviousNodeNoWarnings
+}
 
 Write-Host "`nDEMO EVIDENCE CAPTURE COMPLETE" -ForegroundColor Green
