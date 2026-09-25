@@ -7,8 +7,7 @@
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/run-tests.mjs",
-    "test:win": "tsx --test-runner node $(Get-ChildItem -Recurse test -Filter '*.test.ts' | ForEach-Object { $_.FullName })"
+    "test": "node scripts/run-tests.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

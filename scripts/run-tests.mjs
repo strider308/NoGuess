@@ -31,9 +31,9 @@ console.log(`Running ${files.length} test files...`);
 const result = spawnSync(
   process.execPath,
   [
+    "--import",
+    "tsx",
     "--test",
-    "--require",
-    "tsx/cjs",
     ...files
   ],
   {
