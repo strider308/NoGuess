@@ -1,0 +1,41 @@
+name: Validate submission
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout submission revision
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Full test suite
+        run: npm test
+
+      - name: Demo — unresolved intent remains blocked
+        run: npm run demo:vip-refund
+
+      - name: Demo — explicit human decision
+        run: node --import tsx scripts/demo-vip-refund.ts --answer opt-00
+
+      - name: Demo — other / none stays blocked
+        run: node --import tsx scripts/demo-vip-refund.ts --answer opt-other
