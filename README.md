@@ -1,5 +1,7 @@
 # NoGuess
 
+[![Validate submission](https://github.com/strider308/NoGuess/actions/workflows/validate.yml/badge.svg)](https://github.com/strider308/NoGuess/actions/workflows/validate.yml)
+
 > **Bob can write the code. NoGuess makes sure nobody silently invented the requirement.**
 
 **NoGuess is an epistemic control plane for AI coding agents.**
