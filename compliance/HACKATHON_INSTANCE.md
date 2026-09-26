@@ -1,8 +1,9 @@
 # Hackathon Bob Instance
 
-- Hackathon team: ibm-hackathon-lablab
+- Hackathon-provisioned Bob instance: ibm-coding-challenge-uat
 - Region: us-east
-- Bob IDE team selected: YES
+- Earlier setup/evidence label `ibm-hackathon-lablab` is legacy context only and is not the authoritative hackathon instance.
+- Bob IDE hackathon instance selected: YES
 - Bob Shell version: 2.0.5
 commit: 2dc180906
 - Node version: v24.21.0
