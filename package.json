@@ -1,7 +1,7 @@
 {
   "name": "noguess",
   "version": "0.1.0",
-  "description": "NoGuess M0 — deterministic synthetic fixture runtime",
+  "description": "Epistemic control plane for AI coding agents — detects semantic forks, blocks guess-driven implementation, and records explicit human authority.",
   "private": true,
   "type": "module",
   "scripts": {
