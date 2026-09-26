@@ -3,10 +3,12 @@
 - Hackathon team: ibm-hackathon-lablab
 - Region: us-east
 - Bob IDE team selected: YES
+- Bob IDE version: 2.2.0
+- Bob IDE package version: 1.126.0+bob2.2.0
 - Bob Shell version: 2.0.5
 commit: 2dc180906
 - Node version: v24.21.0
-- Starting Bobcoin balance: 50
+- Observed starting Bobcoin balance on provisioned account: 50
 - Verified timestamp: 2026-09-25T20:43:15.7459179+05:30
 
 ## Security
@@ -19,7 +21,7 @@ private evaluator material, or hidden benchmark answers here.
 - Bob IDE build runtime: Node v22.22.3 / npm 11.14.1
 - Host PowerShell runtime: Node v24.21.0
 - Bob Shell: 2.0.5
-- Bob IDE hackathon allocation: 50 Bobcoins
+- Observed Bob IDE balance on this provisioned account: 50 Bobcoins
+- Official event guide standard allocation: 40 Bobcoins per provisioned Bob account
 
-The Bob IDE allocation is authoritative.
-The earlier 40-Bobcoin value is superseded.
+The repository preserves both values because they describe different evidence: the official guide states the standard event allocation, while this provisioned account visibly exposed 50 Bobcoins during the build.
